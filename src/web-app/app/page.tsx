@@ -1,12 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Pill, AlertCircle, CheckCircle, Building, Shield } from 'lucide-react'
+import { Search, Pill, AlertCircle, CheckCircle, Building, Shield, Volume2, VolumeX } from 'lucide-react'
+import { useAccessibility } from '@/contexts/AccessibilityContext'
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [medicamento, setMedicamento] = useState<any>(null)
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const { speechRate } = useAccessibility()
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,6 +37,71 @@ export default function Home() {
       setIsSearching(false)
     }
   }
+
+  // Função para preparar o texto da bula para leitura
+  const prepareBulaText = () => {
+    if (!medicamento) return ''
+    
+    let text = `Bula do medicamento ${medicamento.nome}. `
+    text += `Laboratório: ${medicamento.laboratorio}. `
+    text += `GTIN: ${medicamento.gtin}. `
+    
+    if (medicamento.bula_simplificada) {
+      text += 'Bula Simplificada. '
+      
+      if (medicamento.bula_simplificada.contraindicacoes?.length > 0) {
+        text += 'Contraindicações: '
+        text += medicamento.bula_simplificada.contraindicacoes.join('. ')
+        text += '. '
+      }
+      
+      if (medicamento.bula_simplificada.forma_de_uso?.length > 0) {
+        text += 'Forma de Uso: '
+        text += medicamento.bula_simplificada.forma_de_uso.join('. ')
+        text += '. '
+      }
+      
+      if (medicamento.bula_simplificada.posologia) {
+        text += `Posologia: ${medicamento.bula_simplificada.posologia}.`
+      }
+    }
+    
+    return text
+  }
+
+  // Função para ler a bula em voz alta
+  const handleReadBula = () => {
+    if (!medicamento) return
+    
+    if (isSpeaking) {
+      window.speechSynthesis.cancel()
+      setIsSpeaking(false)
+      return
+    }
+    
+    const text = prepareBulaText()
+    if (!text) return
+    
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'pt-BR'
+    utterance.rate = speechRate
+    utterance.pitch = 1.0
+    utterance.volume = 1.0
+    
+    utterance.onstart = () => setIsSpeaking(true)
+    utterance.onend = () => setIsSpeaking(false)
+    utterance.onerror = () => setIsSpeaking(false)
+    
+    window.speechSynthesis.cancel() // Cancela qualquer leitura anterior
+    window.speechSynthesis.speak(utterance)
+  }
+
+  // Parar leitura ao desmontar componente
+  useState(() => {
+    return () => {
+      window.speechSynthesis.cancel()
+    }
+  })
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -67,25 +135,51 @@ export default function Home() {
                 </form>
       </div>
 
-      {medicamento && (
+            {medicamento && (
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-12">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-blue-100 p-3 rounded-lg">
-              <Pill className="h-8 w-8 text-blue-600" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-gray-800">{medicamento.nome}</h2>
-              <div className="flex gap-4 text-sm text-gray-600 mt-1">
-                <div className="flex items-center gap-1">
-                  <Building className="h-4 w-4" />
-                  {medicamento.laboratorio}
-                </div>
-                <div className="flex items-center gap-1">
-                  <Shield className="h-4 w-4" />
-                  GTIN: {medicamento.gtin}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-100 p-3 rounded-lg">
+                <Pill className="h-8 w-8 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">{medicamento.nome}</h2>
+                <div className="flex gap-4 text-sm text-gray-600 mt-1">
+                  <div className="flex items-center gap-1">
+                    <Building className="h-4 w-4" />
+                    {medicamento.laboratorio}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Shield className="h-4 w-4" />
+                    GTIN: {medicamento.gtin}
+                  </div>
                 </div>
               </div>
             </div>
+            
+            {/* Botão de Leitura de Bula */}
+            <button
+              onClick={handleReadBula}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                isSpeaking 
+                  ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+                  : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+              }`}
+              aria-label={isSpeaking ? 'Parar leitura da bula' : 'Ler bula em voz alta'}
+              title={`Velocidade: ${speechRate}x`}
+            >
+              {isSpeaking ? (
+                <>
+                  <VolumeX className="h-5 w-5" />
+                  <span className="font-medium">Parar Leitura</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="h-5 w-5" />
+                  <span className="font-medium">Ler Bula</span>
+                </>
+              )}
+            </button>
           </div>
 
           {medicamento.bula_simplificada && (
