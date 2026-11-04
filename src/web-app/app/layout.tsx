@@ -4,6 +4,8 @@ import './globals.css'
 import '../styles/accessibility.css'
 import { AccessibilityProvider } from '../contexts/AccessibilityContext'
 import { AccessibilityWidget } from '../components/AccessibilityWidget'
+import { PageTransitionLoaderWrapper } from '../components/PageTransitionLoaderWrapper'
+import { antiaflickerScript } from '../utils/antiaflicker'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,8 +21,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
+      <head>
+        {/* Script Antiaflicker de Acessibilidade (Execução Síncrona) */}
+        <script dangerouslySetInnerHTML={{ __html: antiaflickerScript }} />
+      </head>
       <body className={`${inter.className} bg-gray-50 text-gray-900 min-h-screen`}>
         <AccessibilityProvider>
+          {/* Preloader de Transição de Página */}
+          <PageTransitionLoaderWrapper />
+          
           {/* Skip Link para Acessibilidade */}
           <a href="#main-content" className="skip-link">
             Pular para o conteúdo principal

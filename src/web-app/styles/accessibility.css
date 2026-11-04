@@ -3,7 +3,127 @@
    Conformidade WCAG 2.2 (AA/AAA) e eMAG
    ============================================ */
 
-/* Base de Escalonamento de Fonte */
+/* ============================================
+   PRELOADER E ANTIAFLICKER
+   ============================================ */
+
+/* Esconde o conteúdo inicial se a acessibilidade ainda não foi inicializada */
+html:not(.a11y-ready) body {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Container do Preloader que cobre toda a tela */
+.page-loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-primary, #ffffff);
+  color: var(--text-primary, #1a1a1a);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+.page-loader-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Animação do Loop de Carregamento Acessível */
+.loader-spinner-loop {
+  width: 64px;
+  height: 64px;
+  border: 6px solid var(--border-color, #e0e0e0);
+  border-top: 6px solid var(--focus-ring, #005fcc);
+  border-radius: 50%;
+  animation: spinLoop 1s linear infinite;
+}
+
+/* Animação Pulsante Suave Interna (Identidade Bula Clara) */
+.loader-brand-icon {
+  position: absolute;
+  font-size: var(--user-base-font-size, 16px);
+  font-weight: bold;
+  color: #005fcc;
+  animation: pulseLoop 1.5s ease-in-out infinite alternate;
+}
+
+/* Keyframes das animações */
+@keyframes spinLoop {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseLoop {
+  0% { transform: scale(0.85); opacity: 0.6; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+/* RESPEITO A ACESSIBILIDADE: Para quem prefere movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .loader-spinner-loop {
+    animation: none;
+    border-top-color: var(--focus-ring, #005fcc);
+    box-shadow: 0 0 0 4px var(--focus-ring, #005fcc);
+  }
+  .loader-brand-icon {
+    animation: none;
+  }
+}
+
+/* Suporte a Alto Contraste */
+[data-contrast="high-dark"] .page-loader-overlay {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+[data-contrast="high-dark"] .loader-spinner-loop {
+  border: 6px solid #ffffff !important;
+  border-top: 6px solid #ffff00 !important;
+}
+
+[data-contrast="high-dark"] .loader-brand-icon {
+  color: #ffff00 !important;
+}
+
+[data-contrast="high-light"] .page-loader-overlay {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+[data-contrast="high-light"] .loader-spinner-loop {
+  border: 6px solid #000000 !important;
+  border-top: 6px solid #000000 !important;
+}
+
+[data-contrast="grayscale"] .page-loader-overlay {
+  filter: grayscale(100%);
+}
+
+/* Texto para leitores de tela (visually hidden) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================
+   BASE DE ESCALONAMENTO DE FONTE
+   ============================================ */
+
 :root {
   --a11y-font-scale: 1;
 }
