@@ -1,0 +1,69 @@
+{
+  "name": "bulaclara-desktop",
+  "version": "1.0.0",
+  "description": "BulaClara - Aplicativo desktop para consulta de bulas de medicamentos",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run dev:electron\"",
+    "dev:frontend": "cd ..\\src\\web-app && npm run dev",
+    "dev:backend": "cd ..\\src && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+    "dev:electron": "wait-on http://localhost:3000 && electron .",
+    "build": "npm run build:frontend && npm run build:backend && npm run build:electron",
+    "build:frontend": "cd ..\\src\\web-app && npm run build",
+    "build:backend": "cd ..\\src && echo 'Building backend...'",
+    "build:electron": "electron-builder",
+    "start": "electron .",
+    "package": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "cd ..\\src\\web-app && npm install && cd ..\\.. && pip install -r requirements.txt"
+  },
+  "keywords": [
+    "bula",
+    "medicamento",
+    "acessibilidade",
+    "electron",
+    "desktop"
+  ],
+  "author": "Grupo03 - Projeto Temático 2",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.bulaclara.desktop",
+    "productName": "BulaClara",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "..\\src\\web-app\\.next\\**\\*",
+      "..\\src\\web-app\\public\\**\\*",
+      "..\\src\\**\\*",
+      "!..\\src\\**\\*.pyc",
+      "!..\\src\\__pycache__\\**\\*"
+    ],
+    "extraResources": [
+      {
+        "from": "..\\src",
+        "to": "src",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "electron/assets/icon.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "electron/assets/icon.png"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "electron/assets/icon.png"
+    }
+  }
+}

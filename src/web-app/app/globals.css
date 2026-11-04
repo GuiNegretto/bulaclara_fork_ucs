@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-size-base: 16px;
+  --font-size-scale: 1.2;
+  --font-size-small: calc(var(--font-size-base) / var(--font-size-scale));
+  --font-size-large: calc(var(--font-size-base) * var(--font-size-scale));
+  --font-size-xlarge: calc(var(--font-size-base) * var(--font-size-scale) * var(--font-size-scale));
+}
+
+/* Controle de tamanho de fonte via variáveis CSS */
+.text-base-font {
+  font-size: var(--font-size-base);
+}
+
+.text-small-font {
+  font-size: var(--font-size-small);
+}
+
+.text-large-font {
+  font-size: var(--font-size-large);
+}
+
+.text-xlarge-font {
+  font-size: var(--font-size-xlarge);
+}
+
+/* Acessibilidade - alto contraste */
+.high-contrast {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity)) !important;
+  color: rgb(255 255 255 / 1) !important;
+}
+
+.high-contrast a,
+.high-contrast button,
+.high-contrast input {
+  background-color: rgb(255 255 255) !important;
+  color: rgb(0 0 0) !important;
+  border: 2px solid rgb(255 255 255) !important;
+}
+
+/* Animações suaves */
+.transition-all-smooth {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Estilos para impressão */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+}
+
+/* Animações de loading */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
