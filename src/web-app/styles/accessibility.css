@@ -1,0 +1,131 @@
+/* ============================================
+   BULA CLARA - Estilos de Acessibilidade
+   Conformidade WCAG 2.2 (AA/AAA) e eMAG
+   ============================================ */
+
+/* Base de Escalonamento de Fonte */
+:root {
+  --a11y-font-scale: 1;
+}
+
+html {
+  font-size: calc(16px * var(--a11y-font-scale));
+}
+
+/* Tamanhos específicos por escala */
+html[data-font-size="100"] { font-size: 16px; }
+html[data-font-size="125"] { font-size: 20px; }
+html[data-font-size="150"] { font-size: 24px; }
+html[data-font-size="200"] { font-size: 32px; }
+
+/* Aumentar tamanho de textos específicos */
+html[data-font-size="125"] h1 { font-size: 2.25rem !important; }
+html[data-font-size="125"] h2 { font-size: 1.75rem !important; }
+html[data-font-size="125"] h3 { font-size: 1.375rem !important; }
+html[data-font-size="125"] p { font-size: 1.125rem !important; }
+html[data-font-size="125"] li { font-size: 1.125rem !important; }
+
+html[data-font-size="150"] h1 { font-size: 2.625rem !important; }
+html[data-font-size="150"] h2 { font-size: 2rem !important; }
+html[data-font-size="150"] h3 { font-size: 1.625rem !important; }
+html[data-font-size="150"] p { font-size: 1.25rem !important; }
+html[data-font-size="150"] li { font-size: 1.25rem !important; }
+
+html[data-font-size="200"] h1 { font-size: 3.5rem !important; }
+html[data-font-size="200"] h2 { font-size: 2.625rem !important; }
+html[data-font-size="200"] h3 { font-size: 2rem !important; }
+html[data-font-size="200"] p { font-size: 1.5rem !important; }
+html[data-font-size="200"] li { font-size: 1.5rem !important; }
+
+/* ============================================
+   MODOS DE CONTRASTE
+   ============================================ */
+
+/* Modo Alto Contraste Escuro */
+html[data-contrast="high-dark"] {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+html[data-contrast="high-dark"] * {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffff00 !important;
+}
+
+html[data-contrast="high-dark"] a,
+html[data-contrast="high-dark"] button {
+  color: #ffff00 !important;
+  border-color: #ffff00 !important;
+}
+
+html[data-contrast="high-dark"] a:hover,
+html[data-contrast="high-dark"] button:hover {
+  background-color: #ffff00 !important;
+  color: #000000 !important;
+}
+
+/* Modo Alto Contraste Claro */
+html[data-contrast="high-light"] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+html[data-contrast="high-light"] * {
+  border-color: #000000 !important;
+  border-width: 2px !important;
+}
+
+html[data-contrast="high-light"] a,
+html[data-contrast="high-light"] button {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+/* Escala de Cinza (Monocromático) */
+html[data-contrast="grayscale"] {
+  filter: grayscale(100%);
+}
+
+/* Filtros para Daltonismo */
+html[data-contrast="protanopia"] {
+  filter: url('#protanopia-filter');
+}
+
+html[data-contrast="deuteranopia"] {
+  filter: url('#deuteranopia-filter');
+}
+
+/* FONTE PARA DISLEXIA */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+
+.a11y-dyslexic { font-family: 'Lexend', sans-serif !important; letter-spacing: 0.1em !important; }
+
+/* ESPAÇAMENTO AMPLIADO */
+.a11y-expanded-spacing p, .a11y-expanded-spacing span, .a11y-expanded-spacing li { line-height: 2.0 !important; letter-spacing: 0.12em !important; }
+
+/* INDICADOR DE FOCO REALÇADO */
+:focus-visible { outline: 4px solid #ffbf00 !important; outline-offset: 3px !important; }
+
+/* ÁREA DE CLIQUE EXPANDIDA */
+.a11y-big-targets button, .a11y-big-targets a { min-height: 48px !important; min-width: 48px !important; padding: 12px 16px !important; }
+
+/* REDUÇÃO DE ANIMAÇÕES */
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; } }
+.a11y-reduce-motion * { animation: none !important; transition: none !important; }
+
+/* WIDGET */
+.a11y-widget-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; }
+.a11y-toggle-btn { width: 56px; height: 56px; border-radius: 50%; background: #0066cc; color: white; border: 3px solid #fff; cursor: pointer; font-size: 28px; }
+.a11y-panel-content { position: absolute; bottom: 70px; right: 0; width: 340px; max-height: 80vh; overflow-y: auto; background: white; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); padding: 24px; }
+.a11y-panel-content h2 { font-size: 20px; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; padding-bottom: 12px; }
+.a11y-panel-content fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.a11y-panel-content legend { font-weight: 600; color: #0066cc; }
+.a11y-panel-content .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.a11y-panel-content .btn-group button { flex: 1; min-width: 60px; padding: 10px; border: 2px solid #ccc; background: white; border-radius: 6px; cursor: pointer; }
+.a11y-panel-content .btn-group button.active { background: #0066cc; color: white; }
+.a11y-panel-content select { width: 100%; padding: 10px; border: 2px solid #ccc; border-radius: 6px; }
+.a11y-panel-content .checkbox-label { display: flex; align-items: center; gap: 10px; padding: 8px 0; cursor: pointer; }
+.a11y-reset-btn { width: 100%; padding: 12px; margin-top: 16px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
