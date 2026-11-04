@@ -51,7 +51,7 @@ export default function RootLayout({
                   <a href="/" className="hover:text-blue-200 transition">Buscar</a>
                   <a href="/historico" className="hover:text-blue-200 transition">Histórico</a>
                   <a href="/etiqueta" className="hover:text-blue-200 transition">Etiquetas</a>
-                  <a href="/conta" className="hover:text-blue-200 transition">Conta</a>
+                                    <a href="/login" className="hover:text-blue-200 transition">Login</a>
                 </nav>
               </div>
             </header>
